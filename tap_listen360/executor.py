@@ -13,6 +13,7 @@ import singer
 import sys
 import datetime
 import pytz
+from datetime import timedelta
 
 LOGGER = singer.get_logger()
 
@@ -79,23 +80,29 @@ class Listen360Executor(TapExecutor):
 
             stream.update_bookmark(last_updated)
 
-            # request_config = self.update_for_next_call(
-            #     res,
-            #     request_config,
-            #     stream
-            # )
+            request_config = self.update_for_next_call(
+                res,
+                request_config,
+                stream,
+                records
+            )
 
-        LOGGER.info('setting last updated to {}'.format(request_config['params']['updated_before']))
-        return request_config['params']['updated_before']
+        formated_update = self.format_updated(request_config['params']['updated_before'])
+        LOGGER.info('setting last updated to {}'.format(formated_update))
+        return formated_update
 
     def generate_api_url(self, stream):
         return self.url + stream.stream + '.xml'
+
+    def format_updated(self, updated_before):
+        date = datetime.datetime.strptime(updated_before, '%Y-%m-%d') - timedelta(days=1)
+        return date.strftime('%Y-%m-%dT%H:%M:%S%z')
 
     def build_initial_params(self, stream, last_updated=None):
         low_window, high_window = self.get_low_and_high_window(last_updated)
 
         return {
-            'page': 0,
+            'page': 1,
             'updated_before': self.format_last_modified(high_window),
             'updated_after': self.format_last_modified(low_window)
         }
@@ -119,21 +126,22 @@ class Listen360Executor(TapExecutor):
 
         return low_window, high_window        
 
-    def update_for_next_call(self, res, request_config, stream):
+    def update_for_next_call(self, res, request_config, stream, records):
         
-        if len(res.json()['objects']) == 0:
+        if len(records) == 0:
             return {
                 "url": self.url,
                 "headers": request_config["headers"],
                 "params": request_config['params'],
-                "run": False
+                "run": False,
             }
 
         return {
             "url": self.generate_api_url(stream),
             "headers": request_config["headers"],
             "params": self.build_next_params(request_config['params']),
-            "run": True
+            "run": True,
+            "api_key": self.api_key
         }
 
     def format_last_modified(self, last_updated):
