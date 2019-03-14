@@ -95,7 +95,7 @@ class Listen360Executor(TapExecutor):
         return self.url + stream.stream + '.xml'
 
     def format_updated(self, updated_before):
-        date = datetime.datetime.strptime(updated_before, '%Y-%m-%d') - timedelta(days=1)
+        date = datetime.datetime.strptime(updated_before, '%Y-%m-%d')
         return date.strftime('%Y-%m-%dT%H:%M:%S%z')
 
     def build_initial_params(self, stream, last_updated=None):
