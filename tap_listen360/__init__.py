@@ -2,6 +2,7 @@ from tap_kit import main_method
 from .executor import Listen360Executor
 from .client import BaseClient
 from .customers import CustomersStream
+from .memberships import MembershipsStream
 
 
 REQUIRED_CONFIG_KEYS = [
@@ -11,6 +12,7 @@ REQUIRED_CONFIG_KEYS = [
 
 STREAMS = [
 	CustomersStream,
+	MembershipsStream
 ]
 
 def main():
