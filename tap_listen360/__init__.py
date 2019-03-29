@@ -3,6 +3,7 @@ from .executor import Listen360Executor
 from .client import BaseClient
 from .customers import CustomersStream
 from .memberships import MembershipsStream
+from .reviews import ReviewsStream
 
 
 REQUIRED_CONFIG_KEYS = [
@@ -12,7 +13,8 @@ REQUIRED_CONFIG_KEYS = [
 
 STREAMS = [
 	CustomersStream,
-	MembershipsStream
+	MembershipsStream,
+	ReviewsStream
 ]
 
 def main():
