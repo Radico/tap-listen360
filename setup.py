@@ -15,10 +15,10 @@ setup(
         "pendulum==1.2.0",
         "xmltodict==0.11.0",
         "ipdb==0.8.1",
-        "tap-kit @ git+https://github.com/Radico/tap-kit.git@master"
+        "tap-kit @ git+https://github.com/Radico/tap-kit.git@main"
     ],
     dependency_links=[
-        "https://github.com/Radico/tap-kit/tarball/master#egg=tap-kit-0.1.1",
+        "https://github.com/Radico/tap-kit/tarball/main#egg=tap-kit-0.1.1",
     ],
     entry_points="""
     [console_scripts]
