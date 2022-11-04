@@ -40,7 +40,7 @@ class BaseClient:
             with singer.metrics.Timer('request_duration', {}) as timer:
                 response = self.requests_method(method, request_config, body)
 
-            if response.status_code in [429, 503, 504]:
+            if response.status_code in [429, 502, 503, 504]:
                 LOGGER.info(f"[Error {response.status_code}] with this "
                             f"response:\n {response}")
                 time.sleep(delay)
